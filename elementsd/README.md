@@ -1,15 +1,27 @@
 ## Elementsd
-* `Dockerfile` downloads the compiled binaries from https://github.com/ElementsProject/elements/releases
-* Whereas `Dockerfile.gitian` uses [gitian](https://github.com/devrandom/gitian-builder) to build from [source](https://github.com/ElementsProject/elements)
 
-You can update Elements' version in the `Dockerfile` and/or `run-gitian.sh` based on the version you want to build (e.g. `v0.18.1` or `commit_hash`).
+- `Dockerfile` downloads the compiled binaries from
+  https://github.com/ElementsProject/elements/releases
+- Whereas `Dockerfile.gitian` uses
+  [gitian](https://github.com/devrandom/gitian-builder) to build from
+  [source](https://github.com/ElementsProject/elements)
+
+You can update Elements' version in the `Dockerfile` and/or `run-gitian.sh`
+based on the version you want to build (e.g. `v0.18.1` or `commit_hash`).
 
 ### Building from source
-If you're on MAC (or Windows), run inside an Ubuntu container (you need [Docker](https://docs.docker.com/install/#supported-platforms)). Assuming you've `git cloned && cd bitcoin-images`:
+
+If you're on MAC (or Windows), run inside an Ubuntu container (you need
+[Docker](https://docs.docker.com/install/#supported-platforms)). Assuming you've
+`git cloned && cd bitcoin-images`:
+
 ```
 docker run -itd --name ub -v `pwd`/elementsd:/opt/elementsd -v /var/run/docker.sock:/var/run/docker.sock ubuntu:bionic sleep infinity
 ```
-Open a shell inside the container (`docker exec -it ub bash`) and install the necessary packages:
+
+Open a shell inside the container (`docker exec -it ub bash`) and install the
+necessary packages:
+
 ```
 apt-get update && \
 apt-get install -y git ruby apt-transport-https ca-certificates curl gnupg-agent software-properties-common && \
@@ -19,38 +31,21 @@ add-apt-repository \
    $(lsb_release -cs) \
    stable" && \
 apt-get update && apt-get install docker-ce -y
-cd /opt/elementsd 
+cd /opt/elementsd
 ./run_gitian.sh
 ```
-You can watch the install or build logs by running `docker exec ub tail -f /opt/elementsd/gitian/var/install|build.log` in another terminal window.
-After gitian has finished successfully, you can `Ctrl+D` out of the container and remove it `docker rm -f ub`.
 
-Lastly, you can build the Docker image(s) with the Elements binaries by specifying the appropriate Dockerfile:
+You can watch the install or build logs by running
+`docker exec ub tail -f /opt/elementsd/gitian/var/install|build.log` in another
+terminal window. After gitian has finished successfully, you can `Ctrl+D` out of
+the container and remove it `docker rm -f ub`.
+
+Lastly, you can build the Docker image(s) with the Elements binaries by
+specifying the appropriate Dockerfile:
+
 ```
 docker build -t blockstream/elementsd:tag_or_commit -f Dockerfile.gitian .
-``` 
-Or feel free to adapt `build-and-push-to-dockerhub.sh` to build/push to your own repo/registry.
-
-### How to run
 ```
-/etc/systemd/system/elements.service
-[Unit]
-Description=elementsd pseudo node
-Wants=docker.target
-After=docker.service
 
-[Service]
-Restart=always
-RestartSec=3
-ExecStartPre=/usr/bin/docker pull blockstream/elementsd:latest
-ExecStart=/usr/bin/docker run \
-    --network=host \
-    --pid=host \
-    --name=elements \
-    -v /mnt/data/elements/elements.conf:/root/.elements/elements.conf:ro \
-    -v /mnt/data/elements:/root/.elements:rw \
-    blockstream/elementsd:latest elementsd -printtoconsole
-ExecStop=/usr/bin/docker exec elements elements-cli stop
-ExecStopPost=/usr/bin/sleep 3
-ExecStopPost=/usr/bin/docker rm -f elements
-```
+Or feel free to adapt `build-and-push-to-dockerhub.sh` to build/push to your own
+repo/registry.
