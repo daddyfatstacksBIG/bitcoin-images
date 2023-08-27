@@ -7,6 +7,10 @@ docker pull blockstream/lightningd:latest
 docker build --network=host \
   --build-arg CLN_VERSION=${VER} \
   -t blockstream/lightningd:${VER} . || { echo -e "\nSomething broke"; exit 1; }
+docker build --network=host \
+  --build-arg CLN_VERSION=${VER} \
+  -t blockstream/lightningd-rest:${VER} 
+  -f Dockerfile.rest. || { echo -e "\nSomething broke"; exit 1; }
 docker push blockstream/lightningd:${VER}
 
 if [[ $LATEST -eq 1 ]]
