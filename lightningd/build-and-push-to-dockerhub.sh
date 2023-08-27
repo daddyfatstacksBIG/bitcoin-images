@@ -10,7 +10,7 @@ docker build --network=host \
 docker build --network=host \
   --build-arg CLN_VERSION=${VER} \
   -t blockstream/lightningd-rest:${VER} 
-  -f Dockerfile.rest. || { echo -e "\nSomething broke"; exit 1; }
+  -f Dockerfile.rest . || { echo -e "\nSomething broke"; exit 1; }
 docker push blockstream/lightningd:${VER}
 docker push blockstream/lightningd-rest:${VER}
 
