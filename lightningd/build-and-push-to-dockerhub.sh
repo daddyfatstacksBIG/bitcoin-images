@@ -7,19 +7,12 @@ docker pull blockstream/lightningd:latest
 docker build --network=host \
   --build-arg CLN_VERSION=${VER} \
   -t blockstream/lightningd:${VER} . || { echo -e "\nSomething broke"; exit 1; }
-docker build --network=host \
-  --build-arg CLN_VERSION=${VER} \
-  -t blockstream/lightningd-rest:${VER} \
-  -f Dockerfile.rest . || { echo -e "\nSomething broke"; exit 1; }
 docker push blockstream/lightningd:${VER}
-docker push blockstream/lightningd-rest:${VER}
 
 if [[ $LATEST -eq 1 ]]
 then
   docker tag blockstream/lightningd:${VER} blockstream/lightningd:latest
-  docker tag blockstream/lightningd-rest:${VER} blockstream/lightningd-rest:latest
   docker push blockstream/lightningd:latest
-  docker push blockstream/lightningd-rest:latest
 fi
 
 SHA=$(docker inspect --format='{{index .RepoDigests 0}}' blockstream/lightningd:latest)

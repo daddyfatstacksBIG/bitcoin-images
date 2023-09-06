@@ -1,3 +1,0 @@
-FROM blockstream/lightningd:latest
-
-RUN pip install flask flask_restx gunicorn flask_socketio json5 gevent gevent-websocket
