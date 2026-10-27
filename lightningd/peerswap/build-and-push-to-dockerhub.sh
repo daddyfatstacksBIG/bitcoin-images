@@ -18,7 +18,8 @@ export FLAVOR="${IMAGE}:${CLN_VER}-peerswap-debian"
 docker buildx build \
     --platform linux/amd64 \
     --push \
-    --cache-from "${FLAVOR}" \
+    --pull \
+    --no-cache \
     --build-arg "CLN_VER=${CLN_VER}" \
     --build-arg "PEERSWAP_VER=${PS_VER}" \
     --build-arg "BITCOIN_VER=${BITCOIN_VER}" \

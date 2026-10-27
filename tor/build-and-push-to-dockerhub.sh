@@ -8,6 +8,7 @@ IMAGE="blockstream/tor:${TOR_VERSION}"
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
     --push \
+    --pull \
     --no-cache \
     --build-arg TOR_VERSION="${TOR_VERSION}" \
     -t "${IMAGE}" .

@@ -48,6 +48,7 @@ ENV UV_PYTHON_DOWNLOADS=never
 RUN apt-get update
 RUN apt-get install -yq git bash autoconf automake build-essential libtool libgmp-dev libsqlite3-dev \
   python3 net-tools zlib1g-dev libsodium-dev gettext
+RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq
 
 # Copy CLN binaries, including the locally built CLNRest plugin, from builder;
 # copy bitcoind/elementsd from their respective images.

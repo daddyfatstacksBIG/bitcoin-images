@@ -9,6 +9,7 @@ ENV UV_PYTHON_DOWNLOADS=never
 
 # Install Python and required system dependencies
 RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
     apt-get install -y --no-install-recommends ca-certificates python3 wget
 # Prepare plugin directory
 ARG PLUGIN_PATH=/opt/plugins

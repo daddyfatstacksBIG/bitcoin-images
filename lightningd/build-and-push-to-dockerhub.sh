@@ -6,7 +6,8 @@ export VER=${VER:-v26.06.9}
 docker buildx build \
   --platform linux/amd64 \
   --push \
-  --cache-from blockstream/lightningd:latest \
+  --pull \
+  --no-cache \
   --build-arg VER=${VER} \
   -t blockstream/lightningd:${VER} . || { echo -e "\nSomething broke"; exit 1; }
 
