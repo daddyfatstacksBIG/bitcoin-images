@@ -41,6 +41,7 @@ build_bitcoind:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - bitcoind/**
         - scripts/**
@@ -61,6 +62,7 @@ build_lightningd:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - lightningd/Dockerfile
         - lightningd/build-and-push-to-dockerhub.sh
@@ -83,6 +85,7 @@ build_lightningd_peerswap:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - lightningd/peerswap/*
         - scripts/**
@@ -103,6 +106,7 @@ build_elementsd:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - elementsd/**
         - scripts/**
@@ -123,6 +127,7 @@ build_waterfalls:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - waterfalls/**
         - scripts/**
@@ -143,6 +148,7 @@ build_electrsd:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - electrsd/**
         - scripts/**
@@ -163,6 +169,7 @@ build_tor:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       variables:
         PUSH: "false"
+        PLATFORMS: "linux/amd64"
       changes:
         - tor/**
         - scripts/**
