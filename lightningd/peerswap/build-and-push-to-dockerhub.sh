@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -eu
 
 export CLN_VER="${CLN_VER:-v26.06.9}"
 export PS_VER="${PS_VER:-v7.0.0}"
@@ -10,16 +10,9 @@ export RUST_VERSION="${RUST_VERSION:-1.98.0}"
 export UV_VERSION="${UV_VERSION:-0.12.0}"
 export PYLN_VERSION="${PYLN_VERSION:-26.6.9}"
 
-export IMAGE="blockstream/lightningd"
-export DOCKERFILE="Dockerfile"
-export FLAVOR="${IMAGE}:${CLN_VER}-peerswap-debian"
-
-# --platform linux/amd64,arm64 \
-docker buildx build \
-    --platform linux/amd64 \
-    --push \
-    --pull \
-    --no-cache \
+exec sh "$(dirname "$0")/../../scripts/publish.sh" build "blockstream/lightningd:${CLN_VER}-peerswap-debian" "${CLN_VER}-peerswap-debian-${PS_VER}" \
+    --platform "${PLATFORMS:-linux/amd64}" \
+    --pull --no-cache \
     --build-arg "CLN_VER=${CLN_VER}" \
     --build-arg "PEERSWAP_VER=${PS_VER}" \
     --build-arg "BITCOIN_VER=${BITCOIN_VER}" \
@@ -28,6 +21,5 @@ docker buildx build \
     --build-arg "RUST_VERSION=${RUST_VERSION}" \
     --build-arg "UV_VERSION=${UV_VERSION}" \
     --build-arg "PYLN_VERSION=${PYLN_VERSION}" \
-    -t "${FLAVOR}" \
-    -f "${DOCKERFILE}" \
-    -t "${FLAVOR}-${PS_VER}" . || { echo -e "\nSomething broke"; exit 1; }
+    -f Dockerfile \
+    .

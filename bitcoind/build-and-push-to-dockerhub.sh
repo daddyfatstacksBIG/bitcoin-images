@@ -1,14 +1,13 @@
 #!/bin/sh
-set -ex
+set -eu
 
 export VER=${VER:-31.1}
-docker buildx build --platform linux/amd64,linux/arm64 \
-  --push \
-  --pull \
-  --no-cache \
-  --build-arg BITCOIN_VERSION=${VER} \
-  -t blockstream/bitcoind:${VER} . || { printf '\nSomething broke\n'; exit 1; }
 
-if [ "${LATEST:-0}" -eq 1 ]; then
-  docker buildx imagetools create -t blockstream/bitcoind:latest blockstream/bitcoind:${VER}
-fi
+extra_tags=
+[ "${LATEST:-0}" != 1 ] || extra_tags=latest
+
+exec sh "$(dirname "$0")/../scripts/publish.sh" build "blockstream/bitcoind:${VER}" "${extra_tags}" \
+    --platform "${PLATFORMS:-linux/amd64,linux/arm64}" \
+    --pull --no-cache \
+    --build-arg BITCOIN_VERSION="${VER}" \
+    .

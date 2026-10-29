@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-set -ex
+set -eu
 
 export VER=${VER:-v26.06.9}
 
-docker buildx build \
-  --platform linux/amd64 \
-  --push \
-  --pull \
-  --no-cache \
-  --build-arg VER=${VER} \
-  -t blockstream/lightningd:${VER} . || { echo -e "\nSomething broke"; exit 1; }
+extra_tags=
+[ "${LATEST:-0}" != 1 ] || extra_tags=latest
 
-if [[ ${LATEST} -eq 1 ]]
-then
-  docker buildx imagetools create -t blockstream/lightningd:latest blockstream/lightningd:${VER}
-fi
+exec sh "$(dirname "$0")/../scripts/publish.sh" build "blockstream/lightningd:${VER}" "${extra_tags}" \
+    --platform "${PLATFORMS:-linux/amd64}" \
+    --pull --no-cache \
+    --build-arg VER=${VER} \
+    .
