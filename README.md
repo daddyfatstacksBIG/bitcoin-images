@@ -55,7 +55,7 @@ push or digest check fails the job, and partial registry writes are not rolled
 back automatically.
 
 Existing build job names and image versions/platforms are retained. Changed image
-jobs validate merge requests with `PUSH=false`; publishing jobs are manual and
+jobs validate merge requests with `PUSH=false` for `linux/amd64` only; publishing jobs are manual and
 master-only. Local scripts accept optional `PLATFORMS` to override the existing
 platform list (for example `linux/amd64`). `LATEST=1` retains the opt-in latest
 aliases for bitcoind, elementsd and lightningd; the other scripts retain their
